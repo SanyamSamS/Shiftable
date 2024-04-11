@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../api";
+import { loginEmployee } from "../api";
+import Cookies from "js-cookie";
 
-const LoginForm = () => {
+const EmployeeLoginForm = () => {
+  //    set initial states
   const [employeeCredentials, setEmployeeCredentials] = useState({
     username: "",
     password: "",
@@ -19,14 +21,17 @@ const LoginForm = () => {
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
+    //    set loading state to true for the button
     setLoading(true);
 
     try {
-      const response = await loginUser(employeeCredentials);
+      const response = await loginEmployee(employeeCredentials);
       const { token } = response.data;
-      localStorage.setItem("token", token);
-      navigate("/dashboard");
+      //     set the token as a cookie, safer than storing it in local storage, then redirect user to dashboard
+      Cookies.set("token", token);
+      navigate("/employeeDashboard");
     } catch (err) {
+      //     different error messages for the user
       if (err.response) {
         if (err.response.status === 404) {
           setLoginAlert("User not found. Please check your credentials.");
@@ -37,6 +42,7 @@ const LoginForm = () => {
           setEmployeeCredentials({ ...employeeCredentials, password: "" });
           return;
         } else {
+          //    only this will have a console.log because it's not a user input error
           console.log(err);
           setLoginAlert("An error occurred. Please try again later.");
           setEmployeeCredentials({ ...employeeCredentials, password: "" });
@@ -44,14 +50,15 @@ const LoginForm = () => {
         }
       }
     } finally {
-      setLoading(false)
+      //    revert button state
+      setLoading(false);
     }
   };
 
   return (
-    <section className="login-component">
+    <section className="employee-login-component">
       <h2>Employee Log In</h2>
-      <form className="login-form" onSubmit={handleFormSubmit}>
+      <form className="employee-login-form" onSubmit={handleFormSubmit}>
         <section className="input-container">
           <input
             className="input-field"
@@ -76,11 +83,16 @@ const LoginForm = () => {
           <button
             className="submit-button"
             type="submit"
-            disabled={!(employeeCredentials.username && employeeCredentials.password)}>
+            disabled={
+              !(employeeCredentials.username && employeeCredentials.password)
+            }
+          >
+            {/* when user clicks the button, it's text will change to Logging in */}
             {loading ? "Logging in ..." : "Log in"}
           </button>
         </section>
         {loginAlert && (
+          // conditional rendering of the error messages when it occurs
           <div className="login-alert" role="alert">
             {loginAlert}
           </div>
@@ -90,4 +102,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default EmployeeLoginForm;
