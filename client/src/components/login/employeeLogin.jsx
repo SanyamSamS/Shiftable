@@ -8,6 +8,7 @@ const EmployeeLoginForm = () => {
   const [employeeCredentials, setEmployeeCredentials] = useState({
     username: "",
     password: "",
+    confirmUsername: "",
   });
   const [loginAlert, setLoginAlert] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,8 +20,15 @@ const EmployeeLoginForm = () => {
     setEmployeeCredentials({ ...employeeCredentials, [name]: value });
   };
 
-  const handleFormSubmit = async (event) => {
+  const handleLoginSubmit = async (event) => {
     event.preventDefault();
+
+    // Check honeypot field, if filled, likely a bot. Does not user honeypot as a identifier to prevent bots who have been trained to ignore terms like "honeypot" or "spam trap".
+    if (employeeCredentials.confirmUsername !== "") {
+      console.log("Bot detected!");
+      return;
+    }
+
     //    set loading state to true for the button
     setLoading(true);
 
@@ -58,7 +66,7 @@ const EmployeeLoginForm = () => {
   return (
     <section className="employee-login-component">
       <h2>Employee Log In</h2>
-      <form className="employee-login-form" onSubmit={handleFormSubmit}>
+      <form className="employee-login-form" onSubmit={handleLoginSubmit}>
         <section className="input-container">
           <input
             className="input-field"
@@ -77,6 +85,16 @@ const EmployeeLoginForm = () => {
             placeholder="Password"
             onChange={handleInputChange}
             value={employeeCredentials.password}
+          />
+          <input
+            //honeypot trap.is not visible to user by setting display to none, but bots will still "see" it.
+            className="confirm-username"
+            type="text"
+            id="confirm-username"
+            name="confirm-username"
+            placeholder="Leave this field empty"
+            onChange={handleInputChange}
+            value={employeeCredentials.confirmUsername}
           />
         </section>
         <section className="button-container">
