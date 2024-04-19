@@ -23,9 +23,24 @@ const EmployeeLoginForm = () => {
   const handleLoginSubmit = async (event) => {
     event.preventDefault();
 
+    //Initialize  flag
+    let isFormValid = true;
+
+    if (employeeCredentials.username == "") {
+      setLoginAlert("Please enter your username.");
+      isFormValid = false;
+    } else if (employeeCredentials.password == "") {
+      setLoginAlert("Please enter your password.");
+      isFormValid = false;
+    }
+
     // Check honeypot field, if filled, likely a bot. Does not user honeypot as a identifier to prevent bots who have been trained to ignore terms like "honeypot" or "spam trap".
-    if (employeeCredentials.confirmUsername !== "") {
+    else if (employeeCredentials.confirmUsername !== "") {
       console.log("Bot detected!");
+      return;
+    }
+
+    if (!isFormValid) {
       return;
     }
 
@@ -33,8 +48,8 @@ const EmployeeLoginForm = () => {
     setLoading(true);
 
     try {
-      const response = await loginEmployee(employeeCredentials);
-      const { token } = response.data;
+      const loginResponse = await loginEmployee(employeeCredentials);
+      const { token } = loginResponse.data;
       //     set the token as a cookie, safer than storing it in local storage, then redirect user to dashboard
       Cookies.set("token", token);
       navigate("/employeeDashboard");
