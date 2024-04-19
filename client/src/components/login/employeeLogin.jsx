@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginEmployee } from "../api";
+// import { loginEmployee } from "../api"; //commented out until backend is ready
 import Cookies from "js-cookie";
 
 const EmployeeLoginForm = () => {
