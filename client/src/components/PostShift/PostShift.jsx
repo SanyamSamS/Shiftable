@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { getDatabase, ref, push } from 'firebase/database';
+// import Propstypes from 'prop-types';
+// import { getDatabase, ref, push } from 'firebase/database'; //commented out so that the code will run
 
 import { format } from 'date-fns';
 
 import './PostShift.css';
 
-const PostShift = ({ onAddShift }) => {
+const PostShift = ({ onAddShift }) => { //this will need to be passed as a prop as well since its rendered in the dashboard component
     const [date, setDate] = useState(new Date());
     const [startTime, setStartTime] = useState('');
     const [endTime, setEndTime] = useState('');
@@ -96,5 +97,10 @@ const PostShift = ({ onAddShift }) => {
         </form>
     );
 };
+
+//prop passing, i think its right? ill leave as comment 
+// PostShift.propTypes = {
+//     onAddShift: PropTypes.func.isRequired
+// };
 
 export default PostShift;
