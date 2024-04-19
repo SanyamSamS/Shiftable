@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUpEmployee } from "../api"; // Update this to the sign-up API function
+import { signUpEmployee, checkAvailability } from "../api"; // Update this to the sign-up API function
 import Cookies from "js-cookie";
+import emailRegex from "../../utils/helpers/emailRegex";
+import passwordRegex from "../../utils/helpers/passwordRegex";
+import usernameRegex from "../../utils/helpers/username";
 // import ReCAPTCHA from "react-google-recaptcha";
 // npm install react-google-recaptcha << have not done that yet
-
 
 const EmployeeSignUpForm = () => {
   const [employeeInfo, setEmployeeInfo] = useState({
@@ -12,16 +14,16 @@ const EmployeeSignUpForm = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    confirmUsername: "",
+    confirmUsername: "", // this is a honeypot
   });
   const [signupAlert, setSignupAlert] = useState(false);
   const [loading, setLoading] = useState(false);
 
-//   const [recaptchaToken, setRecaptchaToken] = useState("");
+  //   const [recaptchaToken, setRecaptchaToken] = useState("");
 
-//   const handleRecaptchaChange = (token) => {
-//     setRecaptchaToken(token);
-//   };
+  //   const handleRecaptchaChange = (token) => {
+  //     setRecaptchaToken(token);
+  //   };
 
   const navigate = useNavigate();
 
@@ -32,32 +34,85 @@ const EmployeeSignUpForm = () => {
 
   const handleSignUpSubmit = async (event) => {
     event.preventDefault();
+    const isValidEmail = emailRegex.test(employeeInfo.email);
+    const isValidPassword = passwordRegex.test(employeeInfo.password);
+    const isValidUsername = usernameRegex.test(employeeInfo.username)
+
+    //Initialize  flag
+    let isFormValid = true;
+
+    // Form validation checks
+    if (employeeInfo.username === "") {
+      setSignupAlert("Please enter a username.");
+      isFormValid = false;
+    } else if (!isValidUsername){
+      setSignupAlert("Please enter a valid username.");
+      isFormValid = false
+    } else if (employeeInfo.email === "") {
+      setSignupAlert("Please enter a email.");
+      isFormValid = false;
+    } else if (!isValidEmail) {
+      setSignupAlert("Please enter a valid email address.");
+      isFormValid = false;
+    } else if (employeeInfo.password === "") {
+      setSignupAlert("Please enter a password.");
+      isFormValid = false;
+    } else if (!isValidPassword) {
+      setSignupAlert("Password must contain at least 1 upper case letter, 1 lower case letter, 1 number, and 1 special character.");
+      isFormValid = false;
+    } else if (employeeInfo.confirmPassword !== employeeInfo.password || employeeInfo.confirmPassword === "") {
+      setSignupAlert("Failed to confirm password. Please try again.");
+      isFormValid = false;
+    }
 
     //   Check if the reCAPTCHA token is available
-    //   if (!recaptchaToken) {
+    //    else if (!recaptchaToken) {
     //     setSignupAlert("Please complete the reCAPTCHA verification.");
-    //     return;
+    //     isFormValid = false;
     //   }
 
     // Check honeypot field
-    if (employeeInfo.confirmUsername !== "") {
+    else if (employeeInfo.confirmUsername !== "") {
       console.log("Bot detected!");
+      isFormValid = false;
+    }
+
+    // If form is not valid, return
+    if (!isFormValid) {
       return;
     }
 
     setLoading(true);
 
     try {
-    //  replace "const response = await signUpEmployee(employeeInfo);" with the following code once recaptcha is implemented
-    //   // Call the sign-up API function with the reCAPTCHA token
-    //   const response = await signUpEmployee({
-    //     ...employeeInfo,
-    //     recaptchaToken,
-    //   });
-      const response = await signUpEmployee(employeeInfo); // Call the sign-up API function
-      const { token } = response.data;
-      Cookies.set("token", token);
-      navigate("/employeeDashboard");
+      // additional checks for availability
+      const response = await checkAvailability(
+        employeeInfo.username,
+        employeeInfo.email,
+        employeeInfo.password
+      );
+      if (response.usernameTaken) {
+        setSignupAlert("Username is already taken. Please choose a different username.");
+        return;
+      } else if (response.emailTaken) {
+        setSignupAlert("Email is already taken. Please use a different email.");
+        return;
+      } else if (response.passwordTaken) {
+        setSignupAlert("Password is already taken. Please choose a different password.");
+        return;
+      } else {
+        //  replace "const response = await signUpEmployee(employeeInfo);" with the following code once recaptcha is implemented
+        //   // Call the sign-up API function with the reCAPTCHA token
+        //   const response = await signUpEmployee({
+        //     ...employeeInfo,
+        //     recaptchaToken,
+        //   });
+        // If none of the fields are taken, proceed with the sign-up process
+        const signUpResponse = await signUpEmployee(employeeInfo);
+        const { token } = signUpResponse.data;
+        Cookies.set("token", token);
+        navigate("/employeeDashboard");
+      }
     } catch (err) {
       // Handle sign-up errors
       console.log(err);
