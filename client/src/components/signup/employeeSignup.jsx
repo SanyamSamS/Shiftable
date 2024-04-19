@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUpEmployee, checkAvailability } from "../api"; // Update this to the sign-up API function
+// import { signUpEmployee, checkAvailability } from "../api"; // Update this to the sign-up API function, commented out till backend is ready
 import Cookies from "js-cookie";
 import emailRegex from "../../utils/helpers/emailRegex";
 import passwordRegex from "../../utils/helpers/passwordRegex";

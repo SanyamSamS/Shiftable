@@ -1,8 +1,9 @@
 import Tag from '../UI/Tag/Tag'; 
+// import PropsTypes from 'prop-types';
 
 import './ShiftCard.css';
 
-const ShiftCard = ({ shift }) => {
+    const ShiftCard = () => { // removed = ({ shift }) => thn shift should be passed as a prop & then const shift (below) can be cancelled out but for testing it should be left in
     const shift = {
     dayDisplay: "Monday",
     dateDisplay: "2022-01-10",
@@ -34,5 +35,10 @@ const ShiftCard = ({ shift }) => {
       </div>
     );
   };
+
+  //props should be passed to the ShiftCard component (this is a bit tricky but has to do with rendering the dom )
+  // ShiftCard.propTypes = {
+  //   shift: PropsTypes.object.isRequired
+  // };
 
 export default ShiftCard;
