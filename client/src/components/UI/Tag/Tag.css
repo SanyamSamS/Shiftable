@@ -1,0 +1,41 @@
+/* Tag styling */
+.tag-selection {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  padding: 8px 12px;
+  border-radius: 15px;
+  background-color: #e0e0e0;
+  cursor: pointer;
+  user-select: none; /* Prevent text selection */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+form .tag:hover {
+  background-color: #ccc;
+}
+
+.tag.selected {
+  background-color: #007aff; /* iOS Blue */
+  color: white;
+}
+
+.tag-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tag-input .tag {
+  background-color: #e0e0e0;
+  padding: 8px 12px;
+  border-radius: 15px;
+  user-select: none;
+}
+
+.tag-input .icon {
+  cursor: pointer;
+}
