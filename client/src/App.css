@@ -1,5 +1,5 @@
 /* hides the honeypot trap by moving it far away from the screen. */
-.confirmUsername {
+.confirm-username {
     position: absolute;
     left: -9999px;
   }
