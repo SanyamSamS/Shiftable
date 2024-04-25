@@ -8,6 +8,8 @@ import usernameRegex from "../../utils/helpers/username";
 // import ReCAPTCHA from "react-google-recaptcha";
 // npm install react-google-recaptcha << have not done that yet
 
+import "./employeeSignup.css"
+
 const EmployeeSignUpForm = () => {
   const [employeeInfo, setEmployeeInfo] = useState({
     username: "",
@@ -124,11 +126,11 @@ const EmployeeSignUpForm = () => {
 
   return (
     <section className="employee-signup-component">
-      <h2>Employee Sign Up</h2>
+      <h2 className="card-title">Employee Sign Up</h2>
       <form className="employee-signup-form" onSubmit={handleSignUpSubmit}>
         <section className="input-container">
           <input
-            className="input-field"
+            className="signup-input-field"
             type="text"
             id="username"
             name="username"
@@ -137,7 +139,7 @@ const EmployeeSignUpForm = () => {
             value={employeeInfo.username}
           />
           <input
-            className="input-field"
+            className="signup-input-field"
             type="email"
             id="email"
             name="email"
@@ -146,7 +148,7 @@ const EmployeeSignUpForm = () => {
             value={employeeInfo.email}
           />
           <input
-            className="input-field"
+            className="signup-input-field"
             type="password"
             id="password"
             name="password"
@@ -155,7 +157,7 @@ const EmployeeSignUpForm = () => {
             value={employeeInfo.password}
           />
           <input
-            className="input-field"
+            className="signup-input-field"
             type="password"
             id="confirmPassword"
             name="confirmPassword"
@@ -175,9 +177,9 @@ const EmployeeSignUpForm = () => {
           {/* <ReCAPTCHA sitekey="YOUR_SITE_KEY" onChange={handleRecaptchaChange} /> */}
         </section>
 
-        <section className="button-container">
+        {/* <section className="button-container"> */}
           <button
-            className="submit-button"
+            className="signup-button"
             type="submit"
             disabled={
               !(
@@ -190,7 +192,7 @@ const EmployeeSignUpForm = () => {
           >
             {loading ? "Signing up ..." : "Sign Up"}
           </button>
-        </section>
+        {/* </section> */}
         {signupAlert && (
           <div className="signup-alert" role="alert">
             {signupAlert}

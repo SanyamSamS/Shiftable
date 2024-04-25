@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 // import { loginEmployee } from "../api"; //commented out until backend is ready
 import Cookies from "js-cookie";
 
+import "./employeeLogin.css"
+
 const EmployeeLoginForm = () => {
   //    set initial states
   const [employeeCredentials, setEmployeeCredentials] = useState({
@@ -80,11 +82,11 @@ const EmployeeLoginForm = () => {
 
   return (
     <section className="employee-login-component">
-      <h2>Employee Log In</h2>
+      <h2 className="card-title">Employee Log In</h2>
       <form className="employee-login-form" onSubmit={handleLoginSubmit}>
         <section className="input-container">
           <input
-            className="input-field"
+            className="login-input-field"
             type="text"
             id="username"
             name="username"
@@ -93,7 +95,7 @@ const EmployeeLoginForm = () => {
             value={employeeCredentials.username}
           />
           <input
-            className="input-field"
+            className="login-input-field"
             type="password"
             id="password"
             name="password"
@@ -112,9 +114,9 @@ const EmployeeLoginForm = () => {
             value={employeeCredentials.confirmUsername}
           />
         </section>
-        <section className="button-container">
+        {/* <section className="button-container"> */}
           <button
-            className="submit-button"
+            className="login-button"
             type="submit"
             disabled={
               !(employeeCredentials.username && employeeCredentials.password)
@@ -123,7 +125,7 @@ const EmployeeLoginForm = () => {
             {/* when user clicks the button, it's text will change to Logging in */}
             {loading ? "Logging in ..." : "Log in"}
           </button>
-        </section>
+        {/* </section> */}
         {loginAlert && (
           // conditional rendering of the error messages when it occurs
           <div className="login-alert" role="alert">

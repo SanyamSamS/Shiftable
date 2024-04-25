@@ -1,0 +1,70 @@
+@keyframes bouncyFadeIn {
+    0% {
+      opacity: 0;
+      transform: translatey(20px);
+    }
+    50% {
+      opacity: 1;
+      transform: translatey(0);
+    }
+    100% {
+      opacity: 1;
+      transform: translatey(0);
+    }
+  }
+  
+  .visible {
+    opacity: 1;
+  }
+
+.employee-login-component{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    animation: bouncyFadeIn 1s ease forwards;
+    max-width: 20rem;
+    background-color: rgb(43, 43, 43);
+    border-radius: 25px;
+}
+
+.card-title{
+    padding-top: 1rem;
+    font-size: larger;
+    font-weight: 600;
+    color: aliceblue;
+}
+
+.employee-login-form{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    background-color: rgb(43, 43, 43);
+}
+
+.login-input-field{
+    background-color: rgb(63, 63, 63);
+    padding: 0.5rem;
+}
+
+.input-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: white;
+}
+
+.login-button{
+    background-color: greenyellow;
+    width: 10rem;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+
+.login-button :hover{
+    cursor: pointer;
+    background-color: red;
+}
