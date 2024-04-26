@@ -1,18 +1,39 @@
 const router = require('express').Router();
 const {
-getAllUsers, getSingleUser, createUser, updateUser, deleteUser, addShiftPosted, addShiftTaken, removeShiftTaken, removeShiftPosted, userCount
+  getAllUsers,
+  getSingleUser,
+  createUser,
+  updateUser,
+  deleteUser,
+  addShiftPosted,
+  addShiftTaken,
+  removeShiftTaken,
+  removeShiftPosted,
+  userCount
 } = require('../../controllers/userController');
 
 // /api/user
-router.route('/').get((req, res) => getAllUsers(req, res)).post((req, res) => createUser(req, res));
+router.route('/').get(getAllUsers).post(createUser);
 
 // /api/user/count
-router.route('/count').get((req, res) => userCount(req, res));
+router.route('/count').get(userCount);
 
 // update a user
-router.route('/:userId').put((req, res) => updateUser(req, res));
+router.route('/:userId').put(updateUser);
 
 // /api/user/:userId
-router.route('/:userId').get((req, res) => getSingleUser(req, res)).delete((req, res) => deleteUser(req, res));
+router.route('/:userId')
+  .get(getSingleUser)
+  .delete(deleteUser);
+
+// /api/user/:userId/shifts/posted
+router.route('/:userId/shifts/posted')
+  .post(addShiftPosted)
+  .delete(removeShiftPosted);
+
+// /api/user/:userId/shifts/taken
+router.route('/:userId/shifts/taken')
+  .post(addShiftTaken)
+  .delete(removeShiftTaken);
 
 module.exports = router;

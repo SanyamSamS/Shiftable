@@ -1,5 +1,8 @@
 const { Shift, User } = require('../models');
 
+//Populating Users: In the getShifts function, you are populating the 'users' field, but based on your schema, it seems like each shift has a 'currentHolder' field, which is a single user. If you want to populate the current holder for each shift, you should populate 'currentHolder' instead of 'users'.
+// Populating Shifts: In the getSingleShift function, you are trying to populate 'shifts', but there's no 'shifts' field in the Shift model based on the provided schema. If you want to populate any nested fields, make sure they exist in the model.
+
 // get all the shifts
 async function getShifts(req, res) {
   try {
@@ -12,6 +15,7 @@ async function getShifts(req, res) {
 
 // get a single shift by id
 async function getSingleShift(req, res) {
+
   try {
     const shift = await Shift.findById(req.params.shiftId).populate('currentHolder');
 
