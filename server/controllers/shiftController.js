@@ -1,8 +1,7 @@
 const { Shift, User } = require('../models');
 
-//Populating Users: In the getShifts function, you are populating the 'users' field, but based on your schema, it seems like each shift has a 'currentHolder' field, which is a single user. If you want to populate the current holder for each shift, you should populate 'currentHolder' instead of 'users'.
-// Populating Shifts: In the getSingleShift function, you are trying to populate 'shifts', but there's no 'shifts' field in the Shift model based on the provided schema. If you want to populate any nested fields, make sure they exist in the model.
 
+// current holder is a placeholder field for the user who is currently holding the shift
 // get all the shifts
 async function getShifts(req, res) {
   try {
@@ -13,6 +12,7 @@ async function getShifts(req, res) {
   }
 }
 
+// current holder is a placeholder field for the user who is currently holding the shift
 // get a single shift by id
 async function getSingleShift(req, res) {
 
@@ -56,12 +56,10 @@ async function deleteShift(req, res) {
     if (!shiftToDelete) {
       return res.status(404).json({ message: 'No shift with that ID' });
     }
-    const userIds = shiftToDelete.currentHolder;
+    const userId = shiftToDelete.createdBy;
     await Shift.findByIdAndDelete(req.params.shiftId);
-    if (userIds) {
-      await User.findByIdAndUpdate(userIds, { $pull: { shifts: req.params.shiftId } });
-    }
-    res.json({ message: 'Shift and associated user successfully deleted' });
+    await User.findByIdAndUpdate(userId, { $pull: { shifts: req.params.shiftId } });
+    res.json({ message: 'Shift successfully deleted' });
   } catch (err) {
     res.status(500).json(err);
   }
