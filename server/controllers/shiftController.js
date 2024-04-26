@@ -3,7 +3,7 @@ const { Shift } = require('../models');
 // get all the shifts
 async function getShifts(req, res) {
   try {
-    const shifts = await Shift.find().populate('username reactions');  // Populate the 'user' field
+    const shifts = await Shift.find().populate('users');  
     res.json(shifts);
   } catch (err) {
     res.status(500).json(err);
@@ -13,7 +13,7 @@ async function getShifts(req, res) {
 // get a single shift by id
 async function getSingleShift(req, res) {
   try {
-    const shift = await Shift.findById(req.params.shiftId).populate('shifts'); // Populate the 'user' field
+    const shift = await Shift.findById(req.params.shiftId).populate('shifts');
 
     if (!shift) {
       return res.status(404).json({ message: 'No shift with that ID' });
@@ -74,35 +74,7 @@ async function updateShift(req, res) {
     res.status(500).json(err);
   }
 }
-// // create a shift post reaction
-// async function createReaction(req, res) {
-//   try {
-//     const shift = await Shift.findById(req.params.shiftId);
-//     if (!shift) {
-//       return res.status(404).json({ message: 'No shift found with this id!' });
-//     }
-//     shift.reactions.push(req.body);
-//     await shift.save();
-//     res.json(shift);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// }
 
-// // remove a shift post reaction
-// async function removeReaction(req, res) {
-//   try {
-//     const shift = await Shift.findById(req.params.shiftId);
-//     if (!shift) {
-//       return res.status(404).json({ message: 'No shift found with this id!' });
-//     }
-//     shift.reactions = shift.reactions.filter(reaction => reaction.reactionId.toString() !== req.params.reactionId);
-//     await shift.save();
-//     res.json(shift);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// }
 
 module.exports = {
   getShifts,
@@ -110,6 +82,4 @@ module.exports = {
   createShift,
   deleteShift,
   updateShift,
-  // createReaction,
-  // removeReaction
 };
