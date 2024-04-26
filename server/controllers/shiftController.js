@@ -1,0 +1,115 @@
+const { Shift } = require('../models');
+
+// get all the shifts
+async function getShifts(req, res) {
+  try {
+    const shifts = await Shift.find().populate('username reactions');  // Populate the 'user' field
+    res.json(shifts);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+
+// get a single shift by id
+async function getSingleShift(req, res) {
+  try {
+    const shift = await Shift.findById(req.params.shiftId).populate('shifts'); // Populate the 'user' field
+
+    if (!shift) {
+      return res.status(404).json({ message: 'No shift with that ID' });
+    }
+
+    res.json(shift);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+
+// create a new shift
+async function createShift(req, res) {
+  try {
+    const { shiftText, userId } = req.body; 
+    const newShift = await Shift.create({ shiftText, username: userId });
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.shifts.push(newShift._id);
+    await user.save(); 
+    res.json(newShift);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(err);
+  }
+}
+
+// shift be gone
+async function deleteShift(req, res) {
+  try {
+    const shiftToDelete = await Shift.findById(req.params.shiftId);
+    if (!shiftToDelete) {
+      return res.status(404).json({ message: 'No shift with that ID' });
+    }
+    const userIds = shiftToDelete.users;
+    await Shift.findByIdAndDelete(req.params.shiftId);
+    for (const userId of userIds) {
+      await User.findByIdAndUpdate(userId, { $pull: { shifts: req.params.shiftId } });
+    }
+    res.json({ message: 'Shift and associated users successfully deleted' });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+// update a shift
+async function updateShift(req, res) {
+  try {
+    const updatedShift = await Shift.findByIdAndUpdate(req.params.shiftId, req.body, { new: true });
+    if (!updatedShift) {
+      return res.status(404).json({ message: 'No shift with this id!' });
+    }
+    res.json(updatedShift);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+// // create a shift post reaction
+// async function createReaction(req, res) {
+//   try {
+//     const shift = await Shift.findById(req.params.shiftId);
+//     if (!shift) {
+//       return res.status(404).json({ message: 'No shift found with this id!' });
+//     }
+//     shift.reactions.push(req.body);
+//     await shift.save();
+//     res.json(shift);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// }
+
+// // remove a shift post reaction
+// async function removeReaction(req, res) {
+//   try {
+//     const shift = await Shift.findById(req.params.shiftId);
+//     if (!shift) {
+//       return res.status(404).json({ message: 'No shift found with this id!' });
+//     }
+//     shift.reactions = shift.reactions.filter(reaction => reaction.reactionId.toString() !== req.params.reactionId);
+//     await shift.save();
+//     res.json(shift);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// }
+
+module.exports = {
+  getShifts,
+  getSingleShift,
+  createShift,
+  deleteShift,
+  updateShift,
+  // createReaction,
+  // removeReaction
+};
