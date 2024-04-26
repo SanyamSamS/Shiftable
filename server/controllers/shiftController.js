@@ -1,9 +1,9 @@
-const { Shift } = require('../models');
+const { Shift, User } = require('../models');
 
 // get all the shifts
 async function getShifts(req, res) {
   try {
-    const shifts = await Shift.find().populate('users');  
+    const shifts = await Shift.find().populate('currentHolder');
     res.json(shifts);
   } catch (err) {
     res.status(500).json(err);
@@ -13,7 +13,7 @@ async function getShifts(req, res) {
 // get a single shift by id
 async function getSingleShift(req, res) {
   try {
-    const shift = await Shift.findById(req.params.shiftId).populate('shifts');
+    const shift = await Shift.findById(req.params.shiftId).populate('currentHolder');
 
     if (!shift) {
       return res.status(404).json({ message: 'No shift with that ID' });
@@ -29,7 +29,7 @@ async function getSingleShift(req, res) {
 async function createShift(req, res) {
   try {
     const { shiftText, userId } = req.body; 
-    const newShift = await Shift.create({ shiftText, username: userId });
+    const newShift = await Shift.create({ shiftText, currentHolder: userId });
 
     const user = await User.findById(userId);
     if (!user) {
@@ -52,16 +52,17 @@ async function deleteShift(req, res) {
     if (!shiftToDelete) {
       return res.status(404).json({ message: 'No shift with that ID' });
     }
-    const userIds = shiftToDelete.users;
+    const userIds = shiftToDelete.currentHolder;
     await Shift.findByIdAndDelete(req.params.shiftId);
-    for (const userId of userIds) {
-      await User.findByIdAndUpdate(userId, { $pull: { shifts: req.params.shiftId } });
+    if (userIds) {
+      await User.findByIdAndUpdate(userIds, { $pull: { shifts: req.params.shiftId } });
     }
-    res.json({ message: 'Shift and associated users successfully deleted' });
+    res.json({ message: 'Shift and associated user successfully deleted' });
   } catch (err) {
     res.status(500).json(err);
   }
 }
+
 // update a shift
 async function updateShift(req, res) {
   try {
@@ -74,7 +75,6 @@ async function updateShift(req, res) {
     res.status(500).json(err);
   }
 }
-
 
 module.exports = {
   getShifts,
