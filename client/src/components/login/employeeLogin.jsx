@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types';
+
 // import { loginEmployee } from "../api"; //commented out until backend is ready
 import Cookies from "js-cookie";
 
+
 import "./employeeLogin.css"
 
-const EmployeeLoginForm = () => {
+const EmployeeLoginForm = ({ isOpen, onClose }) => {
   //    set initial states
   const [employeeCredentials, setEmployeeCredentials] = useState({
     username: "",
@@ -81,8 +84,10 @@ const EmployeeLoginForm = () => {
   };
 
   return (
-    <section className="employee-login-component">
+    <section className={`modal employee-login-component ${isOpen ? "open" : ""}`}>
       <h2 className="card-title">Employee Log In</h2>
+      <span className="close" onClick={onClose}>&times;</span>
+
       <form className="employee-login-form" onSubmit={handleLoginSubmit}>
         <section className="input-container">
           <input
@@ -135,6 +140,11 @@ const EmployeeLoginForm = () => {
       </form>
     </section>
   );
+};
+
+EmployeeLoginForm.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default EmployeeLoginForm;

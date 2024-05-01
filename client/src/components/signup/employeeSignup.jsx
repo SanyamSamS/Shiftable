@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from 'prop-types';
+
 // import { signUpEmployee, checkAvailability } from "../api"; // Update this to the sign-up API function, commented out till backend is ready
 import Cookies from "js-cookie";
 import emailRegex from "../../utils/helpers/emailRegex";
@@ -10,7 +12,7 @@ import usernameRegex from "../../utils/helpers/username";
 
 import "./employeeSignup.css"
 
-const EmployeeSignUpForm = () => {
+const EmployeeSignUpForm = ({ isOpen, onClose }) => {
   const [employeeInfo, setEmployeeInfo] = useState({
     username: "",
     email: "",
@@ -125,8 +127,10 @@ const EmployeeSignUpForm = () => {
   };
 
   return (
-    <section className="employee-signup-component">
+    <section className={`modal employee-signup-component ${isOpen ? "open" : ""}`}>
       <h2 className="card-title">Employee Sign Up</h2>
+      <span className="close" onClick={onClose}>&times;</span>
+
       <form className="employee-signup-form" onSubmit={handleSignUpSubmit}>
         <section className="input-container">
           <input
@@ -201,6 +205,11 @@ const EmployeeSignUpForm = () => {
       </form>
     </section>
   );
+};
+
+EmployeeSignUpForm.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default EmployeeSignUpForm;
