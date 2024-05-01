@@ -86,8 +86,7 @@ const EmployeeLoginForm = ({ isOpen, onClose }) => {
   return (
     <section className={`modal employee-login-component ${isOpen ? "open" : ""}`}>
       <h2 className="card-title">Employee Log In</h2>
-      <span className="close" onClick={onClose}>&times;</span>
-
+      <button className="login-close" onClick={onClose}>&times;</button>
       <form className="employee-login-form" onSubmit={handleLoginSubmit}>
         <section className="input-container">
           <input

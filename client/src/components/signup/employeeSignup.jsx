@@ -129,8 +129,7 @@ const EmployeeSignUpForm = ({ isOpen, onClose }) => {
   return (
     <section className={`modal employee-signup-component ${isOpen ? "open" : ""}`}>
       <h2 className="card-title">Employee Sign Up</h2>
-      <span className="close" onClick={onClose}>&times;</span>
-
+      <button className="signup-close" onClick={onClose}>&times;</button>
       <form className="employee-signup-form" onSubmit={handleSignUpSubmit}>
         <section className="input-container">
           <input

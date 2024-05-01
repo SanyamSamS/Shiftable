@@ -62,9 +62,31 @@
     text-align: center;
     padding: 0.5rem;
     border-radius: 5px;
+    cursor: pointer; /* something is overriding this*/
 }
 
 .login-button :hover{
-    cursor: pointer;
-    background-color: red;
+    background-color: red; /* something is overriding this*/
+    transition: 0.3s; /* something is overriding this*/
+}
+
+.login-close {
+  background-color: red;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+  cursor: pointer;
+  font-size: 25px;
+  color: white;
+  padding: 0rem;
+  /* can't get the x to be centered, tried line height, margins, etc.*/
+}
+
+.login-close:hover {
+  transform: scale(.9);
+  transition: .3s;
 }

@@ -68,3 +68,23 @@
     cursor: pointer;
     background-color: red;
 }
+
+.signup-close {
+  background-color: red;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bolder;
+  cursor: pointer;
+  font-size: 25px;
+  color: white;
+  padding: 0rem;
+}
+
+.signup-close:hover {
+  transform: scale(.9);
+  transition: .3s;
+}
