@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+
+import closeIcon from "../../assets/svg/cancel-close-svgrepo-com.svg";
 
 // import { signUpEmployee, checkAvailability } from "../api"; // Update this to the sign-up API function, commented out till backend is ready
 import Cookies from "js-cookie";
@@ -10,7 +12,7 @@ import usernameRegex from "../../utils/helpers/username";
 // import ReCAPTCHA from "react-google-recaptcha";
 // npm install react-google-recaptcha << have not done that yet
 
-import "./employeeSignup.css"
+import "./employeeSignup.css";
 
 const EmployeeSignUpForm = ({ isOpen, onClose }) => {
   const [employeeInfo, setEmployeeInfo] = useState({
@@ -40,7 +42,7 @@ const EmployeeSignUpForm = ({ isOpen, onClose }) => {
     event.preventDefault();
     const isValidEmail = emailRegex.test(employeeInfo.email);
     const isValidPassword = passwordRegex.test(employeeInfo.password);
-    const isValidUsername = usernameRegex.test(employeeInfo.username)
+    const isValidUsername = usernameRegex.test(employeeInfo.username);
 
     //Initialize  flag
     let isFormValid = true;
@@ -49,9 +51,9 @@ const EmployeeSignUpForm = ({ isOpen, onClose }) => {
     if (employeeInfo.username === "") {
       setSignupAlert("Please enter a username.");
       isFormValid = false;
-    } else if (!isValidUsername){
+    } else if (!isValidUsername) {
       setSignupAlert("Please enter a valid username.");
-      isFormValid = false
+      isFormValid = false;
     } else if (employeeInfo.email === "") {
       setSignupAlert("Please enter a email.");
       isFormValid = false;
@@ -62,9 +64,14 @@ const EmployeeSignUpForm = ({ isOpen, onClose }) => {
       setSignupAlert("Please enter a password.");
       isFormValid = false;
     } else if (!isValidPassword) {
-      setSignupAlert("Password must contain at least 1 upper case letter, 1 lower case letter, 1 number, and 1 special character.");
+      setSignupAlert(
+        "Password must contain at least 1 upper case letter, 1 lower case letter, 1 number, and 1 special character."
+      );
       isFormValid = false;
-    } else if (employeeInfo.confirmPassword !== employeeInfo.password || employeeInfo.confirmPassword === "") {
+    } else if (
+      employeeInfo.confirmPassword !== employeeInfo.password ||
+      employeeInfo.confirmPassword === ""
+    ) {
       setSignupAlert("Failed to confirm password. Please try again.");
       isFormValid = false;
     }
@@ -96,13 +103,17 @@ const EmployeeSignUpForm = ({ isOpen, onClose }) => {
         employeeInfo.password
       );
       if (response.usernameTaken) {
-        setSignupAlert("Username is already taken. Please choose a different username.");
+        setSignupAlert(
+          "Username is already taken. Please choose a different username."
+        );
         return;
       } else if (response.emailTaken) {
         setSignupAlert("Email is already taken. Please use a different email.");
         return;
       } else if (response.passwordTaken) {
-        setSignupAlert("Password is already taken. Please choose a different password.");
+        setSignupAlert(
+          "Password is already taken. Please choose a different password."
+        );
         return;
       } else {
         //  replace "const response = await signUpEmployee(employeeInfo);" with the following code once recaptcha is implemented
@@ -126,61 +137,76 @@ const EmployeeSignUpForm = ({ isOpen, onClose }) => {
     }
   };
 
-  return (
-    <section className={`modal employee-signup-component ${isOpen ? "open" : ""}`}>
-      <h2 className="card-title">Employee Sign Up</h2>
-      <button className="signup-close" onClick={onClose}>&times;</button>
-      <form className="employee-signup-form" onSubmit={handleSignUpSubmit}>
-        <section className="input-container">
-          <input
-            className="signup-input-field"
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Username"
-            onChange={handleInputChange}
-            value={employeeInfo.username}
-          />
-          <input
-            className="signup-input-field"
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleInputChange}
-            value={employeeInfo.email}
-          />
-          <input
-            className="signup-input-field"
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleInputChange}
-            value={employeeInfo.password}
-          />
-          <input
-            className="signup-input-field"
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            placeholder="Confirm Password"
-            onChange={handleInputChange}
-            value={employeeInfo.confirmPassword}
-          />
-          <input
-            className="confirm-username"
-            type="text"
-            id="confirm-username"
-            name="confirm-username"
-            placeholder="Leave this field empty"
-            onChange={handleInputChange}
-            value={employeeInfo.confirmUsername}
-          />
-          {/* <ReCAPTCHA sitekey="YOUR_SITE_KEY" onChange={handleRecaptchaChange} /> */}
-        </section>
+  const handleCloseModal = () => {
+    setSignupAlert("");
+    setEmployeeInfo({
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      confirmUsername: "",
+    });
+    onClose();
+  };
 
-        {/* <section className="button-container"> */}
+  return (
+    <section className={`signup-modal-container ${isOpen ? "open" : ""}`}>
+      <section className={`modal employee-signup-component`}>
+        <h2 className="card-title">Employee Sign Up</h2>
+        <button className="signup-close" onClick={handleCloseModal}>
+          <img src={closeIcon} alt="close button" />
+        </button>
+        <form className="employee-signup-form" onSubmit={handleSignUpSubmit}>
+          <section className="input-container">
+            <input
+              className="signup-input-field"
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Username"
+              onChange={handleInputChange}
+              value={employeeInfo.username}
+            />
+            <input
+              className="signup-input-field"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Email"
+              onChange={handleInputChange}
+              value={employeeInfo.email}
+            />
+            <input
+              className="signup-input-field"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Password"
+              onChange={handleInputChange}
+              value={employeeInfo.password}
+            />
+            <input
+              className="signup-input-field"
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              onChange={handleInputChange}
+              value={employeeInfo.confirmPassword}
+            />
+            <input
+              className="confirm-username"
+              type="text"
+              id="confirm-username"
+              name="confirm-username"
+              placeholder="Leave this field empty"
+              onChange={handleInputChange}
+              value={employeeInfo.confirmUsername}
+            />
+            {/* <ReCAPTCHA sitekey="YOUR_SITE_KEY" onChange={handleRecaptchaChange} /> */}
+          </section>
+
+          {/* <section className="button-container"> */}
           <button
             className="signup-button"
             type="submit"
@@ -195,13 +221,14 @@ const EmployeeSignUpForm = ({ isOpen, onClose }) => {
           >
             {loading ? "Signing up ..." : "Sign Up"}
           </button>
-        {/* </section> */}
-        {signupAlert && (
-          <div className="signup-alert" role="alert">
-            {signupAlert}
-          </div>
-        )}
-      </form>
+          {/* </section> */}
+          {signupAlert && (
+            <div className="signup-alert" role="alert">
+              {signupAlert}
+            </div>
+          )}
+        </form>
+      </section>
     </section>
   );
 };

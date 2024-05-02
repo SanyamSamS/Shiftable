@@ -30,12 +30,13 @@ const closeSignupModal = () => {
       <h1>Shiftable</h1>
         <div className="grid w-full grid-cols-2">
           <button onClick={openLoginModal} value="login">Log In</button>
+
+          <button onClick={openSignupModal} value="signup">Sign Up</button>
           {isLoginModalOpen && (
         <div className="modal-overlay">
           <EmployeeLoginForm isOpen={isLoginModalOpen} onClose={closeLoginModal} />
         </div>
       )}
-          <button onClick={openSignupModal} value="signup">Sign Up</button>
           {isSignupModalOpen && (
         <div className="modal-overlay">
           <EmployeeSignUpForm isOpen={isSignupModalOpen} onClose={closeSignupModal} />
