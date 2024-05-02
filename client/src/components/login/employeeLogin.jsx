@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
+import closeIcon from "../../assets/svg/cancel-close-svgrepo-com.svg";
+
 // import { loginEmployee } from "../api"; //commented out until backend is ready
 import Cookies from "js-cookie";
 
-const EmployeeLoginForm = () => {
+import "./employeeLogin.css";
+
+const EmployeeLoginForm = ({ isOpen, onClose }) => {
   //    set initial states
   const [employeeCredentials, setEmployeeCredentials] = useState({
     username: "",
@@ -78,43 +83,57 @@ const EmployeeLoginForm = () => {
     }
   };
 
+  const handleCloseModal = () => {
+    setLoginAlert("");
+    setEmployeeCredentials({
+      username: "",
+      password: "",
+      confirmUsername: "",
+    });
+    onClose();
+  };
+
   return (
-    <section className="employee-login-component">
-      <h2>Employee Log In</h2>
-      <form className="employee-login-form" onSubmit={handleLoginSubmit}>
-        <section className="input-container">
-          <input
-            className="input-field"
-            type="text"
-            id="username"
-            name="username"
-            placeholder="Username"
-            onChange={handleInputChange}
-            value={employeeCredentials.username}
-          />
-          <input
-            className="input-field"
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleInputChange}
-            value={employeeCredentials.password}
-          />
-          <input
-            //honeypot trap.is not visible to user by setting display to none, but bots will still "see" it.
-            className="confirm-username"
-            type="text"
-            id="confirm-username"
-            name="confirm-username"
-            placeholder="Leave this field empty"
-            onChange={handleInputChange}
-            value={employeeCredentials.confirmUsername}
-          />
-        </section>
-        <section className="button-container">
+    <section className={`login-modal-container ${isOpen ? "open" : ""}`}>
+      <section className={`modal employee-login-component`}>
+        <h2 className="card-title">Employee Log In</h2>
+        <button className="login-close" onClick={handleCloseModal}>
+          <img src={closeIcon} alt="close button" />
+        </button>
+        <form className="employee-login-form" onSubmit={handleLoginSubmit}>
+          <section className="input-container">
+            <input
+              className="login-input-field"
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Username"
+              onChange={handleInputChange}
+              value={employeeCredentials.username}
+            />
+            <input
+              className="login-input-field"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Password"
+              onChange={handleInputChange}
+              value={employeeCredentials.password}
+            />
+            <input
+              //honeypot trap.is not visible to user by setting display to none, but bots will still "see" it.
+              className="confirm-username"
+              type="text"
+              id="confirm-username"
+              name="confirm-username"
+              placeholder="Leave this field empty"
+              onChange={handleInputChange}
+              value={employeeCredentials.confirmUsername}
+            />
+          </section>
+          {/* <section className="button-container"> */}
           <button
-            className="submit-button"
+            className="login-button"
             type="submit"
             disabled={
               !(employeeCredentials.username && employeeCredentials.password)
@@ -123,16 +142,22 @@ const EmployeeLoginForm = () => {
             {/* when user clicks the button, it's text will change to Logging in */}
             {loading ? "Logging in ..." : "Log in"}
           </button>
-        </section>
-        {loginAlert && (
-          // conditional rendering of the error messages when it occurs
-          <div className="login-alert" role="alert">
-            {loginAlert}
-          </div>
-        )}
-      </form>
+          {/* </section> */}
+          {loginAlert && (
+            // conditional rendering of the error messages when it occurs
+            <div className="login-alert" role="alert">
+              {loginAlert}
+            </div>
+          )}
+        </form>
+      </section>
     </section>
   );
+};
+
+EmployeeLoginForm.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
 };
 
 export default EmployeeLoginForm;
