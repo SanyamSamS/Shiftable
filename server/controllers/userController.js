@@ -22,6 +22,24 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+//check if user information already exists in database on signup
+const checkAvailability = async (req, res) => {
+    const { username, email, password } = req.body;
+    try {
+        const usernameExists = await User.findOne({ username });
+        const emailExists = await User.findOne({ email });
+        const passwordExists = await User.findOne({ password })
+
+        res.json({
+            usernameTaken: !!usernameExists,
+            emailTaken: !!emailExists,
+            passwordTaken: !!passwordExists
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Server error while checking availability" });
+    }
+};
+
 // get a single user by their id
 const getSingleUser = async (req, res) => {
   try {
@@ -154,4 +172,4 @@ const removeShiftPosted = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, getSingleUser, createUser, updateUser, deleteUser, addShiftPosted, addShiftTaken, removeShiftTaken, removeShiftPosted, userCount };
+module.exports = { getAllUsers, getSingleUser, createUser, updateUser, deleteUser, addShiftPosted, addShiftTaken, removeShiftTaken, removeShiftPosted, userCount, checkAvailability };
