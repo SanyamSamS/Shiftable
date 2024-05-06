@@ -1,5 +1,7 @@
 /* PostShift.css */
-form {
+
+/* changed from from to .post-shift-form*/
+.post-shift-form  {
   background-color: #fff;
   padding: 20px;
   border-radius: 15px;
@@ -7,7 +9,7 @@ form {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  max-width: 400px; /* Adjust based on your design needs */
+  max-width: 400px; 
   margin: auto;
 }
 
