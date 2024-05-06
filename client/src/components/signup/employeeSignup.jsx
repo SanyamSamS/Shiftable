@@ -4,8 +4,8 @@ import PropTypes from "prop-types";
 
 import closeIcon from "../../assets/svg/cancel-close-svgrepo-com.svg";
 
-// import { signUpEmployee, checkAvailability } from "../api"; // Update this to the sign-up API function, commented out till backend is ready
-import Cookies from "js-cookie";
+import { signUpEmployee, checkAvailability } from "../../api/index"; // Update this to the sign-up API function, commented out till backend is ready
+// import Cookies from "js-cookie";
 import emailRegex from "../../utils/helpers/emailRegex";
 import passwordRegex from "../../utils/helpers/passwordRegex";
 import usernameRegex from "../../utils/helpers/username";
@@ -112,7 +112,7 @@ const EmployeeSignUpForm = ({ isOpen, onClose }) => {
         return;
       } else if (response.passwordTaken) {
         setSignupAlert(
-          "Password is already taken. Please choose a different password."
+          "Password is already taken. Please choose a different password."  //might consider commenting this out and allowing multiple instances of passwords, could this could allow people to figure out what passwords are taken and phish or something? 
         );
         return;
       } else {
@@ -124,9 +124,9 @@ const EmployeeSignUpForm = ({ isOpen, onClose }) => {
         //   });
         // If none of the fields are taken, proceed with the sign-up process
         const signUpResponse = await signUpEmployee(employeeInfo);
-        const { token } = signUpResponse.data;
-        Cookies.set("token", token);
-        navigate("/employeeDashboard");
+        // const { token } = signUpResponse.data;
+        // Cookies.set("token", token); //temporary comment out for development 
+        navigate("/dashboard"); //changed to '/dashboard'
       }
     } catch (err) {
       // Handle sign-up errors
