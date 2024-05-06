@@ -51,6 +51,11 @@
   gap: 2rem;
   margin-bottom: 2rem;
   background-color: rgb(43, 43, 43);
+  padding: 20px;
+  border-radius: 15px;
+  flex-direction: column;
+  max-width: 400px; /* Adjust based on your design needs */
+  margin: auto;
 }
 
 .login-input-field {
