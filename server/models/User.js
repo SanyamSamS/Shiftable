@@ -8,12 +8,12 @@ const userSchema = new Schema({
     trim: true,
     maxLength: 50,
   },
-  phone: {
-    type: String,
-    required: true,
-    unique: true,
-    match: [/^(\d{3}[-.]\d{3}[-.]\d{4})|(\d{10})$/, 'Must match a phone number!'],
-  },
+  // phone: {
+  //   type: String,
+  //   required: false, //set to false until signup is set to require
+  //   unique: true,
+  //   match: [/^(\d{3}[-.]\d{3}[-.]\d{4})|(\d{10})$/, 'Must match a phone number!'],
+  // },
   email: {
     type: String,
     required: true,
@@ -24,10 +24,10 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  role: { //optional
-    type: String,
-    required: true,
-  },
+  // role: { //optional, set to false until signup utilizes 
+  //   type: String,
+  //   required: false,
+  // },
   shiftsPosted: [{
     type: Schema.Types.ObjectId,
     ref: 'Shifts', 

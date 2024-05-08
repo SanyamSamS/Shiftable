@@ -9,11 +9,16 @@ const {
   addShiftTaken,
   removeShiftTaken,
   removeShiftPosted,
-  userCount
+  userCount,
+  checkAvailability
 } = require('../../controllers/userController');
 
 // /api/user
 router.route('/').get(getAllUsers).post(createUser);
+
+// /api/ check-availability,  route for checking the availability of username, email, and possibly password
+router.route('/check-availability')
+  .post(checkAvailability);
 
 // /api/user/count
 router.route('/count').get(userCount);
